@@ -1,0 +1,25 @@
+{
+  "name": "deep-feels-api",
+  "version": "0.0.0",
+  "description": "An API for DeepFeels",
+  "main": "index.js",
+  "scripts": {
+    "dev": "ts-node-dev src/app.ts"
+  },
+  "author": "monstertrap.",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/express": "^4.17.13",
+    "@types/jest": "^27.0.2",
+    "@types/mongoose": "^5.11.97",
+    "jest": "^27.2.1",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.4.3"
+  },
+  "dependencies": {
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.7"
+  }
+}
