@@ -6,6 +6,7 @@ import { mood } from './routes/mood';
 import { pipeSync } from './utils/pipe';
 import { register } from './routes/register';
 import { connectDatabase } from './config/db.config';
+import { login } from './routes/login';
 
 const server = async () => {
 	const app = express();
@@ -21,8 +22,9 @@ const server = async () => {
 
 	//User Routes
 	pipeSync(
-		mood,
 		register,
+		login,
+		mood,
 		me
 	)(app);
 
