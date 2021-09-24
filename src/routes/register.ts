@@ -1,7 +1,7 @@
 import * as argon from 'argon2';
-import * as jwt from 'jsonwebtoken';
-import { Express, Response } from 'express';
 import { User } from '../models/User';
+import { Express, Response } from 'express';
+import { createToken } from '../utils/createToken';
 import { isEmailValid } from '../utils/isEmailValid';
 
 const register = (app: Express) => {
@@ -29,14 +29,6 @@ const register = (app: Express) => {
 		return true;
 	}
 
-	const createToken = (payload: any) => jwt.sign(
-		payload,
-		process.env.JWT_KEY as jwt.Secret,
-		{
-			expiresIn: '16h'
-		}
-	);
-
 	app.post('/user/register', async (req, res) => {
 		const body: RegisterReqBody = req.body;
 
@@ -54,9 +46,10 @@ const register = (app: Express) => {
 
 				//TODO: Return User without password
 				const userDB = await User.findById(document._id).select('-password -email');
-				return res.status(201).json({ok: true, user: userDB, token: createToken(userDB?.toObject())});
+				return res.status(201).json({ok: true, user: userDB, token: createToken({user: user._id})});
 			} catch (error) {
 				console.error(error)
+				return res.status(500);
 			}
 		}
 	})
