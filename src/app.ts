@@ -7,10 +7,10 @@ import { pipeSync } from './utils/pipe';
 import { register } from './routes/register';
 import { connectDatabase } from './config/db.config';
 
-const server = () => {
+const server = async () => {
 	const app = express();
 	const port = process.env.PORT || 9001;
-	connectDatabase();
+	await connectDatabase();
 
 	//Initializing middleware and routes
 	app.use(cors({
