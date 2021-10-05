@@ -1,4 +1,4 @@
-import { model, Schema } from 'mongoose';
+import { model, Schema, SchemaTypes } from 'mongoose';
 
 const UserSchema = new Schema({
 	name: {
@@ -17,9 +17,9 @@ const UserSchema = new Schema({
 		required: true,
 		minlength: 6
 	},
-	mood: {
-		type: String,
-		default: null
+	moods: {
+		type: [SchemaTypes.ObjectId],
+		default: []
 	}
 });
 
@@ -29,6 +29,6 @@ type TUser = {
 	name: string;
 	password: string;
 	email: string;
-	mood: string;
+	moods: string[];
 }
 export { User, TUser };
