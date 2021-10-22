@@ -17,4 +17,12 @@ const TokenSchema = new Schema({
   },
 });
 
-module.exports = model("Token", TokenSchema);
+type TToken = {
+	userId: string;
+	token: string;
+	createAt: string;
+};
+
+const Token = model<TToken>("Token", TokenSchema);
+
+export { Token, TToken };

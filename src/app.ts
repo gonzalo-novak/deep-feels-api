@@ -3,10 +3,11 @@ import dotenv from 'dotenv';
 import express from 'express';
 import { me } from './routes/me';
 import { mood } from './routes/mood';
+import { login } from './routes/login';
 import { pipeSync } from './utils/pipe';
 import { register } from './routes/register';
 import { connectDatabase } from './config/db.config';
-import { login } from './routes/login';
+import { passwordRecovery } from './routes/password-recovery';
 
 const server = async () => {
 	const app = express();
@@ -22,6 +23,7 @@ const server = async () => {
 
 	//User Routes
 	pipeSync(
+		passwordRecovery,
 		register,
 		login,
 		mood,
