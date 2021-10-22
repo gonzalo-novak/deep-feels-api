@@ -8,6 +8,7 @@ import { pipeSync } from './utils/pipe';
 import { register } from './routes/register';
 import { connectDatabase } from './config/db.config';
 import { passwordRecovery } from './routes/password-recovery';
+import { resetPassword } from './routes/reset-password';
 
 const server = async () => {
 	const app = express();
@@ -23,6 +24,7 @@ const server = async () => {
 
 	//User Routes
 	pipeSync(
+		resetPassword,
 		passwordRecovery,
 		register,
 		login,

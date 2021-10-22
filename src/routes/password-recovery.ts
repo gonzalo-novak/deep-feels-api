@@ -33,7 +33,7 @@ const passwordRecovery = (app: Express) => {
 		await token.save();
 
 		// Generating template:
-		const link = process.env.HOST + '/password-recovery';
+		const link = process.env.HOST + `/reset-password.html?token=${resetToken}?uid=${user._id}`;
 
 		// Creating a test email account
 		const testAccount = await createTestAccount();
@@ -74,7 +74,7 @@ const passwordRecovery = (app: Express) => {
 				console.log("Preview URL: %s", getTestMessageUrl(info));
 
 				return res.status(200).json({
-					success: true,
+					ok: true,
 				});
 			}
 		});
