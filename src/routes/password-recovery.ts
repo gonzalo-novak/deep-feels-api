@@ -1,14 +1,14 @@
 import fs from 'fs';
 import path from 'path';
 import crypto from 'crypto';
+import * as argon2 from 'argon2';
 import { Express } from 'express';
+import { compile } from 'handlebars';
 import { User } from '../models/User';
 import { Token } from '../models/Token';
-import * as argon2 from 'argon2';
-import { createTestAccount, createTransport, getTestMessageUrl } from 'nodemailer';
-import { compile } from 'handlebars';
+import Client from 'mailgun.js/dist/lib/client';
 
-const passwordRecovery = (app: Express) => {
+const passwordRecovery = (app: Express, mg: Client) => {
 	app.post('/password-recovery', async (req, res) => {
 		const { email }: { email: string } = req.body;
 
@@ -33,51 +33,44 @@ const passwordRecovery = (app: Express) => {
 		await token.save();
 
 		// Generating template:
-		const link = process.env.HOST + `/reset-password.html?token=${resetToken}?uid=${user._id}`;
+		const link = 'http://' + process.env.HOST + `/reset-password.html?token=${resetToken}?uid=${user._id}`;
 
-		// Creating a test email account
-		const testAccount = await createTestAccount();
-
-		const transporter = createTransport({
-			host: "smtp.ethereal.email",
-			port: 587,
-			secure: false, // true for 465, false for other ports
-			auth: {
-				user: testAccount.user, // generated ethereal user
-				pass: testAccount.pass, // generated ethereal password
-			},
-		});
 
 		// Compiling template
 		const subject = `${user.name}, you have request to recover your password`;
 		const source = fs.readFileSync(path.join(__dirname, '../templates/password-recovery.hbs'), "utf8");
     const compiledTemplate = compile(source);
-
-		const options = () => {
-      return {
-        from: '"Deeply 👻" <support@deepfeels.com>',
-        to: email,
-        subject: subject,
-        html: compiledTemplate({ link, name: user.name }),
-      };
-    };
+		// Email Settings
+		const emailOpts = {
+			to: email,
+			from: '"Deeply 👻" <support@deepfeels.com>',
+			subject,
+			html: compiledTemplate({ link, name: user.name }),
+		};
 
 		// Send email
-		transporter.sendMail(options(), (error, info) => {
-			if (error) {
-				return error;
-			} else {
-				console.log("Message sent: %s", info.messageId);
-				// Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-				// Preview only available when sending through an Ethereal account
-				console.log("Preview URL: %s", getTestMessageUrl(info));
-
-				return res.status(200).json({
-					ok: true,
-				});
+		try {
+			const msg = await mg.messages.create(process.env.MAIL_DOMAIN!, emailOpts);
+			if(msg) {
+				return (
+					res.json({
+						ok: true,
+						message: 'Email has been sent successfully'
+					})
+				);
 			}
-		});
+		}
+		catch (e) {
+			console.error(e);
+			return (
+				res.status(500).json({
+					ok: false,
+				 	message: 'An error as been ocurred in our side :('
+				})
+			);
+		}
+
+
 	});
 };
 export { passwordRecovery };
