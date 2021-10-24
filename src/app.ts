@@ -9,6 +9,7 @@ import { register } from './routes/register';
 import { connectDatabase } from './config/db.config';
 import { passwordRecovery } from './routes/password-recovery';
 import { resetPassword } from './routes/reset-password';
+import { mailgunClient } from './config/mailgun';
 
 const server = async () => {
 	const app = express();
@@ -22,6 +23,8 @@ const server = async () => {
 	}));
 	app.use(express.json({}));
 
+	const mg = mailgunClient();
+
 	//User Routes
 	pipeSync(
 		resetPassword,
@@ -30,7 +33,7 @@ const server = async () => {
 		login,
 		mood,
 		me
-	)(app);
+	)(app, mg);
 
 	app.listen(port, () => {
 		console.log(`App listening at http://localhost:${port}`);
