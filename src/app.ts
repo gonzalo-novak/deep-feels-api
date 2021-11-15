@@ -10,6 +10,7 @@ import { connectDatabase } from './config/db.config';
 import { passwordRecovery } from './routes/password-recovery';
 import { resetPassword } from './routes/reset-password';
 import { mailgunClient } from './config/mailgun';
+import fileUpload  from 'express-fileupload';
 
 const server = async () => {
 	const app = express();
@@ -22,6 +23,12 @@ const server = async () => {
 		allowedHeaders: ['Content-Type', 'Authorization']
 	}));
 	app.use(express.json({}));
+
+	app.use(fileUpload({
+    useTempFiles : true,
+    tempFileDir : '/tmp/',
+		createParentPath: true
+	}));
 
 	const mg = mailgunClient();
 
