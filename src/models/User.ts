@@ -20,12 +20,16 @@ const UserSchema = new Schema({
 	moods: {
 		type: [SchemaTypes.ObjectId],
 		default: []
+	},
+	photo: {
+		type: String
 	}
 });
 
 const User = model<TUser>('User', UserSchema);
 
 type TUser = {
+	photo: string;
 	name: string;
 	password: string;
 	email: string;
