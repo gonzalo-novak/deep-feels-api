@@ -33,7 +33,7 @@ const passwordRecovery = (app: Express, mg: Client) => {
 		await token.save();
 
 		// Generating template:
-		const link = 'http://' + process.env.HOST + `/reset-password.html?token=${resetToken}?uid=${user._id}`;
+		const link = `${process.env.HOST}?token=${resetToken}?uid=${user._id}`;
 
 
 		// Compiling template
@@ -43,7 +43,7 @@ const passwordRecovery = (app: Express, mg: Client) => {
 		// Email Settings
 		const emailOpts = {
 			to: email,
-			from: '"Deeply 👻" <support@deepfeels.com>',
+			from: '"Deeply 👻" <support@deepfeels.space>',
 			subject,
 			html: compiledTemplate({ link, name: user.name }),
 		};
