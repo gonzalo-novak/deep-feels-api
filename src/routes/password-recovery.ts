@@ -33,7 +33,7 @@ const passwordRecovery = (app: Express, mg: Client) => {
 		await token.save();
 
 		// Generating template:
-		const link = `${process.env.HOST}?token=${resetToken}?uid=${user._id}`;
+		const link = `${process.env.HOST}?token=${resetToken}&uid=${user._id}`;
 
 
 		// Compiling template
