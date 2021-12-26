@@ -11,6 +11,7 @@ import { passwordRecovery } from './routes/password-recovery';
 import { resetPassword } from './routes/reset-password';
 import { mailgunClient } from './config/mailgun';
 import fileUpload  from 'express-fileupload';
+import { track } from './routes/tracks';
 
 const server = async () => {
 	const app = express();
@@ -34,6 +35,7 @@ const server = async () => {
 
 	//User Routes
 	pipeSync(
+		track,
 		resetPassword,
 		passwordRecovery,
 		register,
