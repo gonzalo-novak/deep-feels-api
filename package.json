@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/app.js",
     "dev": "ts-node-dev src/app.ts",
-    "build": "tsc && shx cp -R ./src/templates dist"
+    "build": "tsc && shx cp -R ./src/templates dist && shx cp -R ./src/static dist"
   },
   "author": "monstertrap.",
   "license": "ISC",
