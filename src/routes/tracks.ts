@@ -41,7 +41,10 @@ const track = (app: Express) => {
 			const fileStat = fs.statSync(filePath);
 			res.writeHead(200, {
 				'Content-Type': 'audio/mpeg',
-				'Content-Length': fileStat.size
+				'Content-Length': fileStat.size,
+				'Connection': 'Keep-Alive',
+				'Transfer-encoding': 'chunked',
+				'Accept-Ranges': 'bytes',
 			});
 
 			console.log('Sound that will be played', id, sound);
