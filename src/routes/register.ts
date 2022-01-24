@@ -45,7 +45,7 @@ const register = (app: Express) => {
 				const document = await user.save();
 
 				//TODO: Return User without password
-				const userDB = await User.findById(document._id).select('-password -email');
+				const userDB = await User.findById(document._id).select('-password');
 				return res.status(201).json({ok: true, user: userDB, token: createToken({user: user._id})});
 			} catch (error) {
 				console.error(error)
